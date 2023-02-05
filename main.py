@@ -14,13 +14,8 @@ con.execute("""CREATE TABLE IF NOT EXISTS leituras(
             leitura integer )""")
 print("Criando tabela")
 
-script = "SELECT * FROM leituras;"
-con.execute(script)
-
-print(script)
-
 print("Lendo temperaturas")
-for i in range(1,60):
+for i in range(1,10):
     
     tp = 1
     mac = "sp32_sensor01"
@@ -33,4 +28,13 @@ for i in range(1,60):
     con.execute(script, (tp, mac, vl, data_e_hora)) # execute the script
 
 con.commit()
+
+print("Lendo leituras")
+script = "SELECT * FROM leituras;"
+saida = con.execute(script)
+
+for i in saida:
+    print(i)
+
+
 print("programa encerrado")
