@@ -34,20 +34,20 @@ def connect_mqtt() -> mqtt_client.Client:
 
 def subscribe(client: mqtt_client.Client):
     def on_message(client, userdata, msg):
-        rec = json.loads(msg.payload.decode())
+        rec = json.loads(msg.payload)
 
         print(f"Received `{rec}` from `{msg.topic}` topic, type {type(rec)}")
 
-        # con = sqlite3.connect("control.db")
-        # tp = rec["varType"]
-        # mac = rec["id"]
-        # data_e_hora = datetime.fromiso(rec["timestamp"])
-        # vl = rec["value"]
+        con = sqlite3.connect("control.db")
+        tp = rec["varType"]
+        mac = rec["id"]
+        data_e_hora = datetime.fromisoformat(rec["timestamp"])
+        vl = rec["value"]
 
-        # script = "INSERT INTO leituras (tipo_leitura, id_mac, data_hora, leitura) VALUES (?, ?, ?, ?);"
-        # con.execute(script, (tp, mac, data_e_hora, vl)) # execute the script
-        # con.commit()
-        # con.close()
+        script = "INSERT INTO leituras (tipo_leitura, id_mac, data_hora, leitura) VALUES (?, ?, ?, ?);"
+        con.execute(script, (tp, mac, data_e_hora, vl)) # execute the script
+        con.commit()
+        con.close()
 
     client.subscribe(topic)
     client.on_message = on_message
